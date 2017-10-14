@@ -6,10 +6,50 @@
 	objectVersion = 48;
 	objects = {
 
+/* Begin PBXFileReference section */
+		B57D839B1F91159900ACC7AF /* edp_db.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = edp_db.py; sourceTree = "<group>"; };
+		B57D839E1F911F2400ACC7AF /* logging.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = logging.py; sourceTree = "<group>"; };
+		B57D839F1F9122CA00ACC7AF /* edp_system.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = edp_system.py; sourceTree = "<group>"; };
+		B57D83A01F91767000ACC7AF /* edp_router.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = edp_router.py; sourceTree = "<group>"; };
+		B57D83A11F92B12600ACC7AF /* systems.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = systems.json; path = cache/systems.json; sourceTree = SOURCE_ROOT; };
+		B5EBCAE41F91129D00A9B58F /* edpath.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = edpath.py; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
 /* Begin PBXGroup section */
+		B57D839A1F91158200ACC7AF /* edp_modules */ = {
+			isa = PBXGroup;
+			children = (
+				B57D839B1F91159900ACC7AF /* edp_db.py */,
+				B57D839F1F9122CA00ACC7AF /* edp_system.py */,
+				B57D83A01F91767000ACC7AF /* edp_router.py */,
+			);
+			path = edp_modules;
+			sourceTree = "<group>";
+		};
+		B57D839C1F9115E500ACC7AF /* cache */ = {
+			isa = PBXGroup;
+			children = (
+				B57D83A11F92B12600ACC7AF /* systems.json */,
+			);
+			name = cache;
+			path = "New Group";
+			sourceTree = "<group>";
+		};
+		B57D839D1F911F0C00ACC7AF /* support */ = {
+			isa = PBXGroup;
+			children = (
+				B57D839E1F911F2400ACC7AF /* logging.py */,
+			);
+			path = support;
+			sourceTree = "<group>";
+		};
 		B5EBCAD91F91124F00A9B58F = {
 			isa = PBXGroup;
 			children = (
+				B5EBCAE41F91129D00A9B58F /* edpath.py */,
+				B57D839D1F911F0C00ACC7AF /* support */,
+				B57D839C1F9115E500ACC7AF /* cache */,
+				B57D839A1F91158200ACC7AF /* edp_modules */,
 			);
 			sourceTree = "<group>";
 		};
