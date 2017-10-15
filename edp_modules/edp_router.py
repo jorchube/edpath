@@ -11,10 +11,13 @@ class Route:
 
     def pretty_print(self):
         i = 1
+        log('{:=^30}'.format(''))
         for node in self.node_list:
             log('{0:3d}: {1}'.format(i, node.system.name))
             i = i+1
+        log('{:-^30}'.format(''))
         log('Total distance: {0:.2f} Ly'.format(self.length))
+        log('{:=^30}'.format(''))
 
 
     def add_node_at_end(self, node):
@@ -68,6 +71,8 @@ def _create_route_node_set(system_list):
 
 
 def _extract_from_node_set(system_key, route_node_set):
+    if system_key not in route_node_set:
+        return None
     system = route_node_set[system_key]
     del route_node_set[system_key]
     return system
@@ -117,6 +122,8 @@ def _create_route(route_node_set, start_system_name = None, end_system_name = No
         start_node = _extract_from_node_set(start_system_name, route_node_set)
     if end_system_name is not None:
         end_node = _extract_from_node_set(end_system_name, route_node_set)
+    if start_system_name == end_system_name:
+        end_node = start_node
 
     shortest_route = _create_route_recursive(route_node_set, None, Route(), start_node, end_node)
 
