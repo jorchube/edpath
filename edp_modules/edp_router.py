@@ -40,7 +40,6 @@ class Route:
         return new_route
 
 
-
 class RouteNode:
     def __init__(self, system):
         self.system = system
@@ -86,7 +85,7 @@ def _select_shortest_route(route_a, route_b):
     return route_b
 
 
-def _create_route(route_node_set, reference_route, current_route, start_node, end_node):
+def _create_route_recursive(route_node_set, reference_route, current_route, start_node, end_node):
     route = None
 
     if reference_route is not None:
@@ -105,12 +104,12 @@ def _create_route(route_node_set, reference_route, current_route, start_node, en
         current_node = _extract_from_node_set(k, remaining_node_set)
         iteration_route.add_node_at_end(current_node)
         
-        route = _create_route(remaining_node_set, route, iteration_route, start_node, end_node)
+        route = _create_route_recursive(remaining_node_set, route, iteration_route, start_node, end_node)
 
     return route
 
 
-def create_route(route_node_set, start_system_name = None, end_system_name = None):
+def _create_route(route_node_set, start_system_name = None, end_system_name = None):
     start_node = None
     end_node = None
 
@@ -119,11 +118,14 @@ def create_route(route_node_set, start_system_name = None, end_system_name = Non
     if end_system_name is not None:
         end_node = _extract_from_node_set(end_system_name, route_node_set)
 
-    shortest_route = _create_route(route_node_set, None, Route(), start_node, end_node)
+    shortest_route = _create_route_recursive(route_node_set, None, Route(), start_node, end_node)
 
     return shortest_route
 
 
+def create_route(system_list, start_system_name = None, end_system_name = None):
+    route_node_set = _create_route_node_set(system_list)
+    return _create_route(route_node_set, start_system_name, end_system_name)
 
 
 ## TESTS ##
@@ -158,12 +160,10 @@ def _should_create_a_route_node_set():
     assert len(rn[sl[3].name].distance_to) == len(rn) - 1
 
 
-
 def _should_find_the_shortest_route_with_no_start_and_no_end():
     sl = _create_test_system_list()
-    rn = _create_route_node_set(sl)
 
-    route = create_route(rn)
+    route = create_route(sl)
 
     assert len(route.node_list) == 4
     assert route.length < 111.85 and route.length > 111.80
@@ -171,17 +171,16 @@ def _should_find_the_shortest_route_with_no_start_and_no_end():
 
 def _should_find_the_shortest_route_with_a_start_system():
     sl = _create_test_system_list()
-    rn = _create_route_node_set(sl)
     
     start_system_name = sl[2].name
-    route = create_route(rn.copy(), start_system_name)
+    route = create_route(sl, start_system_name)
     
     assert len(route.node_list) == 4
     assert route.node_list[0].system.name == start_system_name
     assert route.length < 111.85 and route.length > 111.80
 
     start_system_name = sl[0].name
-    route = create_route(rn.copy(), start_system_name)
+    route = create_route(sl, start_system_name)
     
     assert len(route.node_list) == 4
     assert route.node_list[0].system.name == start_system_name
@@ -190,31 +189,28 @@ def _should_find_the_shortest_route_with_a_start_system():
 
 def _should_find_the_shortest_route_with_a_end_system():
     sl = _create_test_system_list()
-    rn = _create_route_node_set(sl)
     
     end_system_name = sl[1].name
-    route = create_route(rn.copy(), None, end_system_name)
+    route = create_route(sl, None, end_system_name)
     
     assert len(route.node_list) == 4
     assert route.node_list[3].system.name == end_system_name
     assert route.length < 111.85 and route.length > 111.80
     
     end_system_name = sl[3].name
-    route = create_route(rn.copy(), None, end_system_name)
+    route = create_route(sl, None, end_system_name)
     
     assert len(route.node_list) == 4
     assert route.node_list[3].system.name == end_system_name
     assert route.length < 134.54 and route.length > 134.52
 
 
-
 def _should_find_the_shortest_route_with_start_and_end_system():
     sl = _create_test_system_list()
-    rn = _create_route_node_set(sl)
     
     start_system_name = sl[2].name
     end_system_name = sl[1].name
-    route = create_route(rn.copy(), start_system_name, end_system_name)
+    route = create_route(sl, start_system_name, end_system_name)
     
     assert len(route.node_list) == 4
     assert route.node_list[0].system.name == start_system_name
@@ -223,14 +219,12 @@ def _should_find_the_shortest_route_with_start_and_end_system():
     
     start_system_name = sl[3].name
     end_system_name = sl[0].name
-    route = create_route(rn.copy(), start_system_name, end_system_name)
+    route = create_route(sl, start_system_name, end_system_name)
     
     assert len(route.node_list) == 4
     assert route.node_list[0].system.name == start_system_name
     assert route.node_list[3].system.name == end_system_name
     assert route.length < 148.30 and route.length > 148.28
-
-
 
 
 def tests():
