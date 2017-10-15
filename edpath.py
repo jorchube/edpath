@@ -51,16 +51,31 @@ def _complete_system_names_list(systems_list, start, end):
         systems_list.append(end)
 
 
+def _warn_for_unresolved_names(system_list, system_names_list):
+    resolved_names = []
+
+    for s in system_list:
+        resolved_names.append(s.name)
+
+    for n in system_names_list:
+        if n not in resolved_names:
+            log('Warning: Unable to resolve system {0}. Skipping it.'.format(n))
+
+
 def _create_system_list(system_names_list, start_system_name, end_system_name):
     cache = edp_db.load_data()
     system_list = []
     _complete_system_names_list(system_names_list, start_system_name, end_system_name)
+
     for system_descriptor in cache:
         if system_descriptor['name'].upper() in system_names_list:
             system = edp_system.EdpSystem(system_descriptor)
             system_list.append(system)
         if len(system_list) == len(system_names_list):
             break
+
+    _warn_for_unresolved_names(system_list, system_names_list)
+
     return system_list
 
 
