@@ -9,15 +9,22 @@ class Route:
         self.length = 0
 
 
+    def pretty_string(self):
+        out = ''
+        i = 1
+        for node in self.node_list:
+            out = out + '{0:3d}:  {1}\n'.format(i, node.system.name)
+            i = i+1
+        out = out + '{:-^30}\n'.format('')
+        out = out + 'Total distance: {0:.2f} Ly'.format(self.length)
+        return out
+
+
     def pretty_print(self):
         i = 1
-        log('{:=^30}'.format(''))
-        for node in self.node_list:
-            log('{0:3d}: {1}'.format(i, node.system.name))
-            i = i+1
-        log('{:-^30}'.format(''))
-        log('Total distance: {0:.2f} Ly'.format(self.length))
-        log('{:=^30}'.format(''))
+        print('{:=^30}'.format(''))
+        print(self.pretty_string())
+        print('{:=^30}'.format(''))
 
 
     def add_node_at_end(self, node):
